@@ -20,7 +20,7 @@
 ### 路线 A：Codex + 技能链（推荐）
 
 ```powershell
-git clone https://github.com/<你的用户名>/MathMN.git
+git clone https://github.com/ShuoSachiko/MathMN.git
 cd MathMN
 powershell -ExecutionPolicy Bypass -File scripts/setup-codex.ps1   # 建立 .agents/skills 联结
 mkdir workspaces\my-problem
@@ -30,14 +30,48 @@ codex   # 输入：$1start-mathmodel 完成这个数学建模任务
 
 环境检查用 `$doctor`；需要 MATLAB 时先跑 `python skills/3coding-visual/scripts/matlab_runner.py --check`。
 
-### 路线 B：DeepSeek Harness 预设
+### 路线 B：DeepSeek Harness 安装
+
+本仓库提供 DSH 的"数学建模"Agent 预设（已在本机通过 mount 校验）。安装分三步：拿仓库 → 建技能联结 → 装预设。
+
+**第 1 步：获取仓库**
+
+```powershell
+git clone https://github.com/ShuoSachiko/MathMN.git
+cd MathMN
+```
+
+**第 2 步：建立技能发现联结**（技能链靠工作区内的 `.agents/skills` 被发现，会话工作目录要在这个仓库内或其 `workspaces/` 子目录下）
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/setup-codex.ps1
+```
+
+**第 3 步：安装预设**
+
+Windows PowerShell：
 
 ```powershell
 mkdir "$env:USERPROFILE\.dsh\.agent-presets\mathmodel" -Force
 Copy-Item dsh\preset-mathmodel\* "$env:USERPROFILE\.dsh\.agent-presets\mathmodel" -Force
 ```
 
-新建会话选择"数学建模"预设。详见 [dsh/README.md](dsh/README.md)。
+macOS / Linux：
+
+```bash
+mkdir -p "${DSH_HOME:-$HOME/.dsh}/.agent-presets/mathmodel"
+cp dsh/preset-mathmodel/* "${DSH_HOME:-$HOME/.dsh}/.agent-presets/mathmodel/"
+```
+
+**第 4 步：新建会话并验证**
+
+1. 在 DSH 新建会话时，预设列表中选择 **数学建模**；
+2. 会话工作目录设为仓库根目录（或 `workspaces/` 下某题工作区）；
+3. 验证成功：会话技能目录里能看到 `1start-mathmodel`、`2analysis-modeling`、`6verity` 等技能；输入 `$1start-mathmodel 完成这个数学建模任务` 即进入工作流。
+
+**从 GitHub 发现本插件**：本仓库打有 `dsh-plugin` 话题标签，可在 <https://github.com/topics/dsh-plugin> 中找到。
+
+> **一键安装（profile bundle）待办**：DSH 官方的一键安装形态为 `dsh plugin --profile <name> add <git-spec>`（profile bundle）。当前版本对"包内随附 skill 目录"的声明式路径仍有官方列名的覆盖缺口，因此本仓库暂以"复制预设文件"方式安装；待能力闭合后补充 `dsh/bundle/` 并支持一条命令安装。详见 [dsh/README.md](dsh/README.md)。
 
 ## 🔁 工作流
 
@@ -59,6 +93,7 @@ Copy-Item dsh\preset-mathmodel\* "$env:USERPROFILE\.dsh\.agent-presets\mathmodel
 - **三篇中文论文全部 xelatex 编译成功**，提交包校验 PASS，21 个人工检查点零伪造；
 - **数值复现**：两题干净复现 PASS；2025-A 暴露了 MATLAB 版本更新（Update 3→4）导致固定种子启发式漂移——已按规程处置并固化"精确版本记录"义务；
 - **演习修复**：root_hash 双口径统一、LaTeX 图片路径约定修正、runner 编码修复、沙箱环境文档化；
+- 完整结论与逐题报告见 `workspaces/EXERCISE_SUMMARY.md`（演习工作区默认不入库）。
 
 ## 📁 目录结构
 
