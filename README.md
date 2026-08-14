@@ -12,7 +12,7 @@
 - **八阶段工作流**：文献检索（按需）→ 题意分析与建模（`contract_lint` 冻结前校验）→ 编程与图表（含候选算法对比实验）→ 流程图 → 论文撰写（Typst/LaTeX 双引擎，34 套模板 + 防误提交哨兵）→ **论文评审打磨环**（评分卡 + 多版本摘要）→ 最终验收（完整性/文本/提交包/编译/视觉九道检查）；
 - **Python + MATLAB 双轨**：`matlab_runner` 四重门禁（退出码/完成标记/RESULT 行/产物新鲜度），固定种子与精确版本记录，跨版本复现差异处置流程；
 - **提交包校验**：论文 PDF、支撑材料 zip、提交工作簿逐格 schema、AI 使用日志、MD5 清单；
-- **DSH 集成**：`dsh/preset-mathmodel/` 提供开箱即用的数学建模 Agent 预设（已 mount 校验）；
+- **DSH 集成**：`dsh/preset-mathmodel/` 提供数学建模 Agent 预设（本机已通过 mount 校验；安装方式为手动复制到用户预设根，见下方"路线 B"）。**注意**：DSH 没有插件市场，当前也尚未打包成官方 profile bundle——该形态待官方"包内 skill 资源路径"能力闭合后补充；
 - **隔离评测**：`7benchmark` 封存/验封协议，历史公开题按污染敏感性处理，不宣称盲测能力。
 
 ## 🚀 快速开始
@@ -20,8 +20,8 @@
 ### 路线 A：Codex + 技能链（推荐）
 
 ```powershell
-git clone https://github.com/<你的用户名>/MathModelAgent.git
-cd MathModelAgent
+git clone https://github.com/<你的用户名>/MathMN.git
+cd MathMN
 powershell -ExecutionPolicy Bypass -File scripts/setup-codex.ps1   # 建立 .agents/skills 联结
 mkdir workspaces\my-problem
 cd workspaces\my-problem
