@@ -26,6 +26,10 @@ jobs:
           # created there. RUNNER_TEMP (D:\a\_temp) is a real directory.
           export TMP="$RUNNER_TEMP"
           export TEMP="$RUNNER_TEMP"
+          # UTF-8 mode: child scripts write UTF-8 and subprocess text-mode
+          # reads decode as UTF-8, avoiding cp1252 mojibake on Windows.
+          export PYTHONUTF8=1
+          export PYTHONIOENCODING=utf-8
           python skills/1start-mathmodel/scripts/test_project_guard.py
           python skills/1start-mathmodel/scripts/test_task_versions.py
           python skills/6verity/tests/test_integrity_check.py

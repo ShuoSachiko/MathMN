@@ -525,6 +525,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     Returns:
         退出码：0=PASS，1=FAIL，2=UNVERIFIED。
     """
+    # Windows 控制台默认编码（GBK/cp1252）无法编码输出中的中文与特殊字符，
+    # 会导致脚本在写入 stdout 时崩溃（2026-08 CI 实测）。统一按 UTF-8 输出。
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        pass
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project_root", type=Path, help="项目根目录")
     parser.add_argument(
