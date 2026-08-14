@@ -31,8 +31,9 @@ description: "数学建模竞赛最终验收阶段。逐 ReqID 核对原题语�
 7. 原始题面白名单、题意合同、阶段门禁、来源记录和交接文件。
 8. claim ledger、validation manifest、run manifest 和论文追踪矩阵。
 9. 图表目录和比赛要求的 Excel/CSV 等提交文件。
-10. 可复现代码目录。
-11. 编译后的 PDF，或可由入口文件编译得到的输出 PDF。
+10. `reports/REVIEW_REPORT.md`（若执行了 `$mathmodel-review-polish`，作为 paper 检查点的辅助证据；其存在不替代任何硬门禁）。
+11. 可复现代码目录。
+12. 编译后的 PDF，或可由入口文件编译得到的输出 PDF。
 
 不要假设论文目录一定叫 `paper/`，也不要假设结果文件一定在项目根。若项目使用不同命名，按实际结构传参并在 `reports/VERIFY_REPORT.md` 中说明。
 

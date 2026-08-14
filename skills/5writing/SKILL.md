@@ -193,7 +193,10 @@ fig_pipeline.pdf -> 数据预处理/方法节
 结果图 -> 对应的结果节
 ```
 
-图片路径相对于写入该图片的文件：写在 `paper/main.typ` 或 `paper/main.tex` 中通常用 `../figures/xxx.pdf`，写在 `paper/sections/*.typ` 或 `paper/sections/*.tex` 中通常用 `../../figures/xxx.pdf`。
+图片路径解析规则（两种引擎不同，勿混用）：
+
+- **Typst**：相对路径按**引用图片的文件**解析——写在 `paper/sections/*.typ` 用 `../../figures/xxx.pdf`，写在 `paper/main.typ` 用 `../figures/xxx.pdf`；
+- **LaTeX**：相对路径按**编译工作目录**解析。规定统一从 `paper/` 目录执行 `xelatex main.tex`，因此**所有文件（含 sections）一律用 `../figures/xxx.pdf`**（2026-08 实战演习中两题因 sections 写 `../../figures/` 而编译失败，已修正该口径；writing_check 对两种解析都接受）。
 
 **Typst 引擎**图片插入：
 
@@ -432,6 +435,15 @@ python <mathmodel-literature-research skill>/scripts/validate_literature_bundle.
 在所有章节完成后撰写中文摘要或英文 Summary Sheet。必须包含每个子问题的方法和精确的数值结果。
 
 摘要中的每个关键结论也必须在 `PAPER_TRACEABILITY.json` 中映射到 supported claim，并沿用账本的认知等级和舍入。对人类尚在权衡的表述或结构保存为分任务候选，使用 diff 审查后再 select，不覆盖早期版本。完成写作后更新 `CURRENT_VERSIONS.json`、writing gate 和 `HANDOFF.json`；只有全部 ReqID 有最终回答、全部论文 claim 可追溯且无新增事实，并取得 paper 人工签认时才可 `PASS`。模拟豁免只能 `UNVERIFIED`。
+
+### 步骤 7：质量评审环（写完后自己读一遍）
+
+章节与摘要完成后、`$6verity` 之前，调用 `$mathmodel-review-polish` 执行一轮质量评审与打磨：
+
+- 独立评审（优先异构模型）按评分卡打分并产出排序改进清单；
+- 摘要至少生成 3 个候选版本（方法流/结果流/创新流），快照、diff、比较后由队员选择；
+- 按改进清单迭代一轮（默认一轮；高风险题两轮）；改动只限表述、结构与完整性，不得新增事实、不得引入账本外数值；
+- 时间紧张时至少保留摘要评审，可跳过全文章节重写；评审报告 `reports/REVIEW_REPORT.md` 纳入 paper 检查点审查范围。
 
 ## LaTeX 写作要点
 

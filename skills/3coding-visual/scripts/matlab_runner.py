@@ -226,6 +226,14 @@ def main() -> int:
     marker_count = completed.stdout.count(MATLAB_COMPLETION_MARKER)
     display_output = combined.replace(MATLAB_COMPLETION_MARKER, "")
     if display_output:
+        # Windows consoles default to GBK; MATLAB output can contain
+        # characters (e.g. U+FFFD) that GBK cannot encode, which crashed the
+        # runner AFTER a successful execution (observed in the 2026-08
+        # exercise). Reconfigure stdout with a replace error handler.
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, OSError):
+            pass
         print(
             display_output,
             end="" if display_output.endswith("\n") else "\n",

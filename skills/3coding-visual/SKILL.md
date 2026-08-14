@@ -71,6 +71,17 @@ MATLAB 运行时不可用时不得伪造执行结果。报告缺失项并调用 
 
 逆问题/参数反演还必须检查：前向模型的解析极限或合成参数回收；目标参数相对干扰参数的可识别性/条件性；至少一个简单、结构不同的基线或跨方法对照；数据窗口、预处理、初值和关键外部参数的敏感性；统计不确定性与系统参数不确定性分开报告。频谱或周期估计要显式检查谐波、倍频/分频别名和参数边界，不能因多个同源导出文件一致就视为反演正确。
 
+### Step 2.5 候选对比实验（默认轻量档）
+
+若 `reports/ALGORITHM_CANDIDATES*.json` 存在且某子问题有 ≥2 个 `SELECTED` 候选：
+
+1. 用 `$mathmodel-algorithm-lab` 的 `experiment_runner.py` 在 `weak-dev`/`balanced` 档运行候选（相同目标、约束、种子集合、评估预算与停止条件；必须含确定性基线），再跑 `aggregate_experiments.py`；
+2. 把跨候选统计（成功数、可行率、最佳/中位数/四分位数、耗时）写入 `results/candidate_comparison.json` 与 `RESULTS_REPORT.md` 的"候选对比"小节；
+3. 按证据选择主方法，在 `DECISION_LOG.md` 记录选择（引用对比结果与人类确认），被否决候选的理由一并记录；
+4. 仅当用户明确豁免、或该子问题已有解析证明/穷举证书/精确求解器 gap 时可跳过，并把豁免写入 `DECISION_LOG.md`。
+
+对比实验是"选对方法"的证据，不是新的论文数值来源；论文引用对比结论时只能按实验账本的强度措辞。
+
 ### 搜索域、事件与结论强度
 
 - 所有搜索边界、仿真终止条件和时间窗都要来自题面、可行性条件、解析界或可复核的域扩张证据；禁止无解释的“足够大”常数。
@@ -83,6 +94,8 @@ MATLAB 运行时不可用时不得伪造执行结果。报告缺失项并调用 
 
 - 每个 `problemN.m` 必须可从项目根目录独立、无交互运行；不要依赖当前编辑器工作区中的变量。
 - 固定随机种子，例如 `rng(2025, "twister")`，并在结果报告记录 MATLAB/Octave 版本和所需工具箱。
+- **记录精确 MATLAB 版本**（`ver`/`version` 输出写入运行日志与 RESULTS_REPORT）：固定种子的启发式（自编 DE、fminsearch、intlinprog 等）**跨 MATLAB 更新可能不可 bit 复现**（2026-08 演习实测：R2025b Update 3→Update 4 改变 rand/randperm/randi 序列与 intlinprog 行为，导致 4/5 问数值漂移）。复现与封存必须同版本，版本变化时把差异记入 DECISION_LOG 并决定规范值；
+- 统一入口脚本**不得依赖会被子脚本 `clearvars` 清掉的变量**：每个 `run(fullfile(fileparts(mfilename('fullpath')), 'problemN.m'))` 内联计算路径，或把入口写成函数（2026-08 演习实测 'root'/'base' 未识别故障）。
 - 使用 `readtable`/`writetable` 交换表格，用 `save(..., "*.mat")` 保存关键工作区变量；结果同时输出为 CSV/JSON 等可检查格式，不能只留在 `.mat` 中。
 - 使用 `fullfile` 和 `mfilename("fullpath")` 构造路径，避免写死盘符或用户目录。
 - 图表使用 `exportgraphics(..., "ContentType", "vector")` 导出 PDF；若 Octave 不支持该调用，使用经过实测的 `print(..., "-dpdf")` 兼容分支。

@@ -436,7 +436,7 @@ class IntegrityChecker:
         if not isinstance(inputs, list) or not inputs:
             self.report.error("PROBLEM_INPUTS_MISSING", "inputs must be a non-empty list", source)
             return
-        self._check_root_hash(doc, "inputs", source)
+        self._check_root_hash(doc, "inputs", source, strip_verification=True)
         for index, record in enumerate(inputs):
             owner = f"{source}:inputs[{index}]"
             if not isinstance(record, dict):
@@ -498,7 +498,9 @@ class IntegrityChecker:
         if not isinstance(files, list) or not files:
             self.report.error("RUN_FILES_MISSING", "files must be a non-empty list", source)
             return
-        self._check_root_hash(doc, "files", source)
+        self._check_root_hash(
+            doc, "files", source, composite=("commands", "files", "runtime", "sources")
+        )
         run_paths: set[str] = set()
         for index, record in enumerate(files):
             owner = f"{source}:files[{index}]"
@@ -1328,12 +1330,44 @@ class IntegrityChecker:
                     owner,
                 )
 
-    def _check_root_hash(self, doc: Mapping[str, Any], field: str, source: str) -> None:
+    def _check_root_hash(
+        self,
+        doc: Mapping[str, Any],
+        field: str,
+        source: str,
+        strip_verification: bool = False,
+        composite: tuple[str, ...] | None = None,
+    ) -> None:
         expected = normalized_hash(doc.get("root_hash"))
         if expected is None:
             self.report.error("ROOT_HASH_MISSING", "root_hash must be a SHA-256 digest", source)
             return
-        actual = sha256_bytes(canonical_json_bytes(doc.get(field)))
+        if composite is not None and all(key in doc for key in composite):
+            # 3coding-visual/build_run_manifest.py hashes a composite material
+            # {commands, files, runtime, sources}, not the `files` list alone.
+            # Hashing only `files` here produced ROOT_HASH_MISMATCH for every
+            # build_run_manifest-produced run_manifest (2026-08 exercise).
+            material = {key: doc[key] for key in composite}
+        else:
+            material = doc.get(field)
+            if strip_verification and isinstance(material, list):
+                # Shared normalization with 1start-mathmodel/project_guard.py
+                # (_input_hash_material): verification bookkeeping fields are
+                # mutable append-only metadata and must not change the input
+                # fingerprint. Hashing the full input records here produced
+                # ROOT_HASH_MISMATCH against every project_guard-created
+                # manifest (observed in the 2026-08 three-problem exercise).
+                ignored = {
+                    "verification",
+                    "verification_actor",
+                    "verification_note",
+                    "verified_at",
+                }
+                material = [
+                    {key: value for key, value in item.items() if key not in ignored}
+                    for item in material
+                ]
+        actual = sha256_bytes(canonical_json_bytes(material))
         if actual != expected:
             self.report.error(
                 "ROOT_HASH_MISMATCH",

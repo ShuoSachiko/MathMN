@@ -37,7 +37,7 @@
 - Skill metadata: `python C:/Users/<user>/.codex/skills/.system/skill-creator/scripts/quick_validate.py <skill-dir>` when the built-in validator is available.
 - LaTeX templates: `python skills/5writing/scripts/validate_templates.py`.
 - MATLAB runner: `python skills/3coding-visual/scripts/matlab_runner.py --check`.
-- Integrity scripts: run the stdlib unit tests under `skills/1start-mathmodel/scripts/`, `skills/3coding-visual/scripts/`, `skills/3coding-visual/tests/`, `skills/6verity/tests/`, and `skills/7benchmark-mathmodel/tests/`.
+- Integrity scripts: run the stdlib unit tests under `skills/1start-mathmodel/scripts/`, `skills/1start-mathmodel/tests/`, `skills/2analysis-modeling/tests/`, `skills/3coding-visual/scripts/`, `skills/3coding-visual/tests/`, `skills/6verity/tests/`, and `skills/7benchmark-mathmodel/tests/`.
 - Shell text gate: `bash -n skills/6verity/scripts/writing_check.sh`.
 - Generic forward tests must use synthetic tasks from more than one problem family and include both reject and accept cases. They must not encode a real contest answer.
 - Backend: `backend/.venv/Scripts/python.exe -m ruff check app` from `backend/`.

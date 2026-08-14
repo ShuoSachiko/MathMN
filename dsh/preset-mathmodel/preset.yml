@@ -1,0 +1,2 @@
+name: 数学建模
+description: 面向数学建模竞赛的完整 Agent：保留全部编码/Shell/检索/目标/子代理能力，persona 主入口为 $1start-mathmodel 工作流，适合 CUMCM/美赛等 72 小时赛制的团队协作。

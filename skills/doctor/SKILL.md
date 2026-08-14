@@ -249,6 +249,15 @@ Doctor 检查完成（macOS）
 - drawio 和 PDF 转 PNG 工具缺失不影响核心工作流，仅影响导出质量。
 - 如平台检测为 unknown，打印所有平台命令供用户手动选择。
 
+## 沙箱化 Harness 环境（DSH 等）
+
+在受限沙箱（如 DeepSeek Harness 的 workspace-write 模式）中运行时，先实测以下两类命令，失败即按提示升级执行权限（仅限对应命令）：
+
+- **MATLAB**：启动需写用户配置目录（`%APPDATA%\MathWorks`、`%PROGRAMDATA%\MathWorks`），默认沙箱下报 `Fatal Startup Error: System Error: File system inconsistency` 或 `CreateFile 拒绝访问`。解法：把 `$env:TMP/$env:TEMP` 指向工作区目录，并对 `matlab_runner.py` 命令使用更宽的执行权限（2026-08 三题演习实测）；
+- **xelatex/MiKTeX**：首次编译缺宏包时需联网自动装包并写 MiKTeX 日志目录，默认沙箱下装包失败导致 `titlesec.sty not found` 等。解法：对 xelatex 命令使用更宽执行权限，或预先在非沙箱环境装齐宏包；
+- **子代理会话通常无法扩权**（审批被自动拒绝），需要扩权的执行应由主控 Agent 代跑并回传结果；
+- **bash 可能不可用**：`writing_check.sh` 需改用等价 Python 内嵌执行（其 `--help`/实现自述），`bash -n` 校验交由 CI。
+
 ## MATLAB Agentic Toolkit 可选检查
 
 当 `plan.md` 选择 MATLAB 时，除 `matlab_runner.py --check` 外再运行：

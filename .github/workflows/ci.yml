@@ -32,6 +32,8 @@ jobs:
           python skills/mathmodel-algorithm-lab/tests/test_algorithm_lab.py
           python skills/mathmodel-literature-research/tests/test_validate_literature_bundle.py
           python skills/mathmodel-orchestrator/tests/test_agent_protocol.py
+          python skills/2analysis-modeling/tests/test_contract_lint.py
+          python skills/1start-mathmodel/tests/test_time_tracker.py
 
       - name: Validate writing templates
         run: |
@@ -62,3 +64,11 @@ jobs:
 
       - name: Syntax-check backend
         run: python -m compileall backend/app
+
+  bash-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: bash -n writing_check.sh
+        run: bash -n skills/6verity/scripts/writing_check.sh

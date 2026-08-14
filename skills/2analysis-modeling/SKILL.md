@@ -33,6 +33,7 @@ description: "数学建模赛题分析与建模设计阶段。用于在文献与
 3. 确认 intake gate 为 `PASS`，以及所有已触发的上游 gate 已通过，再把 analysis gate 改为 `RUNNING`；
 4. 读取 `plan.md`、`PROVENANCE.md`、`DECISION_LOG.md` 和 `HANDOFF.json`；
 5. 只读取 manifest 白名单内的题面/附件和 evidence bundle 中已登记、符合任务模式的通用方法资料。`isolated-benchmark` 与 `retrospective-audit` 封存前禁止接触答案、讲评、范文、旧结果和目标数值。
+6. 建立合同后、标 `FROZEN` 前，运行 `python "<本 skill>/scripts/contract_lint.py" --root .`；任何 `FAIL` 必须修复（缺失验收断言、占位符、quantities 种类错误、md/json 不一致等），不得带着错误冻结合同——合同缺陷必须在本阶段暴露，而不是留到 6verity 才发现。
 
 任一必需前置条件缺失或状态为 `STALE/FAIL` 时停止，不得凭聊天上下文补造题面或理论。已触发的文献门禁为 `CONDITIONAL` 时，只有缺口不支配核心模型、限制已进入报告且用户明确确认才可继续，相关结论不得升级为确定事实。
 
@@ -126,6 +127,25 @@ description: "数学建模赛题分析与建模设计阶段。用于在文献与
 
 先建立最简单的可检验基线，再根据误差结构、机理、约束和数据量选择更复杂模型。禁止因为比赛名称、题号、历史获奖频率或模板内置示例直接指定算法。每个复杂模型都要写出相对基线的必要性和失败条件。
 
+### 候选路线 → 机器可读候选池（交给 3coding 对比实验）
+
+对含优化、搜索、预测或参数估计的子问题，在选定主路线后，用 `$mathmodel-algorithm-lab` 的 selector 按问题结构生成候选池，供 3coding 阶段执行统一预算的对比实验：
+
+```bash
+python "<mathmodel-algorithm-lab skill>/scripts/algorithm_selector.py" \
+  --registry "<mathmodel-algorithm-lab skill>/assets/algorithm_registry.json" \
+  --variable <continuous|discrete|mixed> --objective <single|multi> \
+  --constraints <none|linear|nonlinear> --differentiable <yes|no|unknown> \
+  --convex <yes|no|unknown> --evaluation-cost <low|medium|high> \
+  --domain "<本题领域>" \
+  --output reports/ALGORITHM_CANDIDATES_<子问题>.json
+```
+
+- 每个这类子问题产出一个候选文件；只有单个优化型子问题时可直接命名 `reports/ALGORITHM_CANDIDATES.json`（6verity 会核对该文件）；
+- 输出中的 `research_queries` 交给文献检索阶段核验原文与适用条件；核验后把各候选的 `selection_status` 更新为 `SELECTED`/`REJECTED` 并附理由；
+- 候选池必须含确定性基线 + 主算法 + 结构不同的替代算法；能用精确法时不因某算法"流行"而跳过；
+- 无法结构化（纯解析推导）的子问题记 N/A，不要为凑文件而生成候选。
+
 若任务由观测反推物理参数、隐状态、源项或系统结构，按逆问题处理。建模报告必须区分目标参数、干扰参数和算法控制量，说明前向模型、参数可识别性与可能的等价解；至少保留一个结构不同的简单反演基线。材料常数、标定量或边界条件只有在题面或已核验证据支持时才能固定；否则纳入联合估计、区间/场景分析或系统误差传播，不能用一个方便常数替代后再只报告重复性误差。
 
 ### Step 4: 建模报告
@@ -193,6 +213,7 @@ description: "数学建模赛题分析与建模设计阶段。用于在文献与
 - 固定量与决策/预测量分离；
 - 无未处理占位符和重大未决歧义；
 - 每个要求都有验收断言和下游任务；
+- `contract_lint.py` 无 FAIL；每个优化型 REQ 有候选池文件（或明确的 N/A 理由）；
 - JSON 中记录 `PROBLEM_MANIFEST.json` 的当前 SHA-256，并与 `PROBLEM_CONTRACT.md` 一致。
 
 JSON 还必须提供顶层 `quantities`，为每个量记录唯一 ID、`kind=fixed|decision|state|control|derived`、单位、定义/值或定义域及来源 ReqID；后续 claim 使用这些 ID 声明实际使用的量。以 `python <6verity skill>/scripts/integrity_check.py --print-schema` 为机器 schema 的权威说明，不自行发明同义字段。

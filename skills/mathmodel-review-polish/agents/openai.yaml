@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文评审与打磨"
+  short_description: "写作完成后按评分卡独立评审论文，产出改进清单与多版本摘要候选并驱动迭代"
+  default_prompt: "Use $mathmodel-review-polish to review the finished paper against the rubric, produce a ranked improvement list and multiple abstract candidates, then drive one iteration of rewriting without adding new facts."

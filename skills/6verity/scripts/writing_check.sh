@@ -509,8 +509,15 @@ else:
     image_re = re.compile(r'\\includegraphics\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}')
 for path, text in file_texts:
     for ref in image_re.findall(text):
-        target = (path.parent / ref).resolve()
-        if not target.exists():
+        # Typst resolves relative to the referencing file; xelatex resolves
+        # relative to the compile cwd (the paper/ directory when compiling
+        # `xelatex main.tex` from there). Accept either resolution so the
+        # gate matches the engine it checks: file-relative first, then the
+        # paper-dir-relative convention recommended by 5writing.
+        candidates = [(path.parent / ref).resolve()]
+        if not is_typst and main.exists():
+            candidates.append((main.parent / ref).resolve())
+        if not any(target.exists() for target in candidates):
             fail(f"referenced image does not exist from {rel(path)}: {ref}")
 
 if figures_dir and figures_dir.exists():

@@ -27,6 +27,8 @@ description: "数学建模竞赛工作流入口。用于盘点并锁定题面来
 - `reports/AI_USAGE_LOG.jsonl`：实际比赛中 AI 工具、版本、用途、关键交互摘要、产物和人类复核/修改的只追加记录；字段服从当届官方规则。
 - `reports/LITERATURE_RESEARCH_REPORT.md`：问题指纹、检索过程、证据角色、候选理论路线和门禁结论。
 - `references/literature_registry.csv`、`search_log.csv`、`claim_evidence.csv`：可机器检查的来源、检索和主张证据链。
+- `reports/RISK_REGISTER.md`：各阶段主动发现的问题、异常与风险（只追加，含严重度、证据位置与建议）；每个阶段结束必须更新，等待人工处理的高风险项不得静默关闭。
+- `reports/TIME_BUDGET.json`：时间预算台账（`scripts/time_tracker.py` 维护），阶段推进时 `mark`，偏离计划时按 plan.md 降级策略处置。
 
 ## 工作流
 
@@ -254,6 +256,7 @@ workflow（文献与 DrawIO 按触发条件启用）：
 | 编程实现和图表生成 | `3coding-visual` | 实现可复现代码，运行实验，生成结果表和多种多样的图表。 | `code/`, `results/` ,  `RESULTS_REPORT.md`, `figures/图表` |
 | 流程与架构图绘制 | `4drawio` | 在论文确实需要时，绘制方法流程图、架构图和非数据型概念图。 | `figures/*.drawio`, `figures/*.pdf`, `DRAWIO_REPORT.md` |
 | 竞赛论文撰写 | `5writing` | 基于分析、建模、代码结果和图表撰写最终竞赛论文，并按章节直接插入图表。 | `paper/` |
+| 论文质量评审与打磨 | `mathmodel-review-polish` | 写作完成后按评分卡独立评审、产出排序改进清单与多版本摘要候选，并驱动一轮迭代（不新增事实）。 | `REVIEW_REPORT.md`, 摘要候选版本 |
 | 验证和验收 | `6verity` | 检查可复现性、一致性、产物完整性、格式规范和提交就绪状态。 | `VERIFY_REPORT.md` |
 
 高风险触发器：
@@ -264,6 +267,12 @@ workflow（文献与 DrawIO 按触发条件启用）：
 - 选择 MATLAB：检查官方 Agentic Toolkit；MCP 负责开发测试，独立 batch runner 负责最终复现。
 
 每个阶段开始前先核对上游 gate、当前输入哈希和 `reports/HANDOFF.json`，结束时写入产物哈希、覆盖的 `REQ-*`、验证命令与退出码。`human-supervised` 下，intake、contract、model、results、paper、submission 六个机器强制检查点（启用文献阶段时增加 literature）都先生成一页审查包，汇报关键决策、正反证据、计算结果、最高风险和可复核命令；只有人类明确确认后才能在 `HUMAN_REVIEW.json` 如实登记 `APPROVED`。Agent 不得替人批准。确认不能豁免事实错误；用户明确接受的范围缩减应记录为 waiver，但最终状态不得因此把未验证项写成已通过。
+
+**检查点降摩擦（不削弱人工签认）**：一次人类审查会议可以覆盖多个非阻断检查点（literature、contract、model、results、paper），每个检查点仍各登记一条 `APPROVED` 事件（同一 reviewer 与 source-id、各自 scope）；intake 与 submission 必须单独逐次审批。Agent 只能准备审查包，任何情形都不得代批。
+
+**主动性与异步**：每个阶段结束除审查包外，必须向 `reports/RISK_REGISTER.md` 追加本节发现（数据异常、假设矛盾、未决歧义、失败风险），并在汇报中主动列出"建议队员注意/裁决"的条目，而不是等队员提问。无审查点的计算与实验（如 `$mathmodel-algorithm-lab` 的预算档长跑、复现验证）可夜间无人值守执行；检查点一律等待队员，异步执行不得跨越未批准的门禁。
+
+**时间预算**：plan.md 确定预算后运行 `python "<本 skill>/scripts/time_tracker.py" init --deadline <ISO时间> --budget-hours <小时> --stage-budget <阶段=小时> ...`；每阶段结束 `mark`，每次会合先 `status`。出现 behind/over-budget 警告时按 plan.md 的降级策略执行（砍复杂度、砍实验数量、砍装饰图），不得砍题意合同、必交输出、独立验证、人工检查或最终复现。
 
 ## 阶段边界
 
