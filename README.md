@@ -458,9 +458,9 @@ clone 项目后，下载 **Todo Tree** 插件，可以查看代码中所有具�
 
 ## 📄 版权License
 
-个人免费使用，请勿商业用途，商业用途联系我（作者）
+本仓库按 [PolyForm Noncommercial License 1.0.0](./LICENSE) 授权：源码开放，个人、学术、研究与各类非商业用途免费；**商业用途请联系作者单独授权**。
 
-[License](./docs/md/License.md)
+[License](./LICENSE)
 
 ## 🙏 Reference
 
