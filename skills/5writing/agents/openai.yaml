@@ -1,0 +1,4 @@
+interface:
+  display_name: "竞赛论文撰写"
+  short_description: "用已核验文献和计算结论撰写逐要求、逐来源可追溯的竞赛论文"
+  default_prompt: "Use $5writing only after literature, analysis, and coding gates pass; draft from verified sources and supported claims, and maintain ReqID and citation traceability."

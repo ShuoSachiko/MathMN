@@ -1,0 +1,59 @@
+.vscode/
+*.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.idea/
+settings.local.json
+dump.rdb
+backend/.env.dev
+.trae/
+.cache/
+.runtime/
+.agents/
+.codex/config.toml
+.codex/config.toml
+workspaces/
+_tmp/
+.tmp-*/
+
+# Local comparison/reference copies are not project sources. Keeping them
+# ignored prevents accidental commits and avoids contaminating future runs.
+MathModelNJU/
+
+# 字体文件（用户自行安装，见 README）
+# 微软字体（SimHei/SimSun/SimKai）有版权限制，不提交
+# 用户可通过系统字体或安装 Noto CJK 替代
+skills/5writing/templates/**/fonts/
+
+# LaTeX 编译产物（用户自行编译生成）
+skills/5writing/templates/**/*.aux
+skills/5writing/templates/**/*.log
+skills/5writing/templates/**/*.toc
+skills/5writing/templates/**/*.out
+skills/5writing/templates/**/missfont.log
+# LaTeX 模板编译生成的 PDF（保留 huaweibei 的 logo.pdf 和 title.pdf 模板资源）
+skills/5writing/templates/**/main.pdf
+
+# 依赖目录（根级兜底；backend/、frontend/ 子目录另有各自的 .gitignore）
+backend/.venv/
+frontend/node_modules/
+frontend/dist/
+backend/.ruff_cache/
+backend/logs/
+
+# Python 字节码（目录级覆盖）
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 临时目录（`.tmp-*/` 已覆盖，此处显式列出常用名）
+.tmp-test/
+.tmp-a/
+.tmp-b/
+
+# 残留的空临时目录（权限受限无法删除，忽略以免 git 扫描报错）
+tmp5ecz7qq7/
+validate_templates_ulazv36a/
+

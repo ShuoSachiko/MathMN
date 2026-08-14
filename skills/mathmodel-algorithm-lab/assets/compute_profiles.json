@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "weak-dev": {"max_workers": 1, "max_runs": 12, "timeout_seconds": 120, "allow_gpu": false},
+    "balanced": {"max_workers": 4, "max_runs": 96, "timeout_seconds": 1800, "allow_gpu": false},
+    "i9-4060": {"max_workers": 12, "max_runs": 512, "timeout_seconds": 7200, "allow_gpu": true},
+    "i9-4060-long": {"max_workers": 20, "max_runs": 2048, "timeout_seconds": 21600, "allow_gpu": true}
+  }
+}

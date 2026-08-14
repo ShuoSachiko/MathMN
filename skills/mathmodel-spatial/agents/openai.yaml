@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模空间工具链"
+  short_description: "核验坐标、距离、邻接、轨迹、覆盖与三维空间语义"
+  default_prompt: "Use $mathmodel-spatial to audit and solve the spatial components of this modeling task."

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "profile": "weak-dev",
+  "runs": [
+    {
+      "run_id": "pso-sphere-seed-1",
+      "argv": ["python", "skills/mathmodel-algorithm-lab/scripts/pso_runner.py", "--benchmark", "sphere", "--dimension", "4", "--lower", "-5", "--upper", "5", "--particles", "20", "--iterations", "50", "--seed", "1", "--output", "results/pso-sphere-seed-1.json"],
+      "expected_artifacts": ["results/pso-sphere-seed-1.json"]
+    }
+  ]
+}

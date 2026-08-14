@@ -1,0 +1,4 @@
+interface:
+  display_name: "建模环境检查"
+  short_description: "检查 Codex、论文编译器、Python 和 MATLAB"
+  default_prompt: "Use $doctor to inspect this machine for all selected workflow dependencies."

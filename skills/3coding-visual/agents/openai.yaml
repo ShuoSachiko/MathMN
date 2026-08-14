@@ -1,0 +1,4 @@
+interface:
+  display_name: "编程求解与绘图"
+  short_description: "按冻结合同求解，生成结论证据、独立验证和可追溯图表"
+  default_prompt: "Use $3coding-visual only with a current frozen contract and passing upstream gates; implement in Python or MATLAB, run clean validations, preserve task alternatives, and produce claim, validation, and run manifests for human review."

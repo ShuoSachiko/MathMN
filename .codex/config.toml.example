@@ -1,0 +1,14 @@
+# Run scripts/setup-matlab-agentic.ps1 -Install to generate .codex/config.toml
+# with absolute paths for the current machine. Codex loads project-scoped MCP
+# configuration only after the project is trusted and the Codex host restarts.
+
+[mcp_servers.matlab]
+command = 'C:\path\to\MathModelAgent\.runtime\matlab-agentic-toolkit\bin\matlab-mcp-server-windows-x64.exe'
+args = ['--matlab-root=C:\Program Files\MATLAB\R2025b', '--initial-working-folder=C:\path\to\MathModelAgent', '--matlab-display-mode=desktop', '--disable-telemetry=true', '--log-folder=C:\path\to\MathModelAgent\.runtime\matlab-mcp-logs']
+cwd = 'C:\path\to\MathModelAgent'
+env_vars = ['WINDIR']
+startup_timeout_sec = 60
+tool_timeout_sec = 7200
+enabled = true
+required = false
+default_tools_approval_mode = 'writes'

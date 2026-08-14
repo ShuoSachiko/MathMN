@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模算法实验室"
+  short_description: "检索候选算法并按预算并行执行多种子基准和消融实验"
+  default_prompt: "Use $mathmodel-algorithm-lab to compare suitable algorithms under a reproducible compute budget."

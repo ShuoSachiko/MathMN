@@ -1,0 +1,4 @@
+interface:
+  display_name: "赛题分析与建模"
+  short_description: "基于已核验证据比较路线、冻结题意合同并形成可验证模型"
+  default_prompt: "Use $2analysis-modeling only after intake and literature gates pass; compare evidence-backed routes, freeze the ReqID contract, and design a verifiable model."

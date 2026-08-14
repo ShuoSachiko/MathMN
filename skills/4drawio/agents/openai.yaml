@@ -1,0 +1,4 @@
+interface:
+  display_name: "流程图与架构图"
+  short_description: "只在确有解释价值时生成可追溯、可版本化的非数据图"
+  default_prompt: "Use $4drawio only with current passing upstream gates; create only diagrams supported by the frozen contract and claim ledger, record ReqID provenance, and preserve human-reviewed alternatives."

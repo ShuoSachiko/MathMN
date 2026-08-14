@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文验证与验收"
+  short_description: "验收逐要求语义、文献追溯、复现、表格、编译和提交质量"
+  default_prompt: "Use $6verity to verify literature and citation traceability, current hashes, every ReqID, clean reproduction, workbooks, and every PDF page before returning PASS, FAIL, or UNVERIFIED."

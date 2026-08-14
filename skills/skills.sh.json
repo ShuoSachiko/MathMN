@@ -1,0 +1,34 @@
+{
+  "title": "MathModelAgent Skills",
+  "description": "以 Codex 为主控的可追溯数学建模竞赛工作流，支持多 Agent、空间建模、算法实验、MATLAB、双论文引擎和最终验收。",
+  "sections": [
+    {
+      "title": "主工作流（按阶段使用）",
+      "skills": [
+        "1start-mathmodel",
+        "mathmodel-orchestrator",
+        "mathmodel-literature-research",
+        "2analysis-modeling",
+        "mathmodel-spatial",
+        "mathmodel-algorithm-lab",
+        "3coding-visual",
+        "4drawio",
+        "5writing",
+        "6verity"
+      ]
+    },
+    {
+      "title": "工具 Skills",
+      "skills": [
+        "7benchmark-mathmodel",
+        "doctor",
+        "mathmodel-figure-templates",
+        "typst-author"
+      ]
+    },
+    {
+      "title": "内部依赖",
+      "skills": ["_references"]
+    }
+  ]
+}

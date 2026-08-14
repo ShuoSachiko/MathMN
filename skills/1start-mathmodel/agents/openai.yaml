@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模总控"
+  short_description: "锁定题源并启动含文献理论门禁的可追溯、可版本化建模流程"
+  default_prompt: "Use $1start-mathmodel to inventory authorized inputs, initialize integrity and human-review gates, and require literature research before modeling."

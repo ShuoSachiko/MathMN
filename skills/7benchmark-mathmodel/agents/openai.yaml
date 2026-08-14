@@ -1,0 +1,7 @@
+interface:
+  display_name: "数学建模隔离评测"
+  short_description: "封存与验封盲测产物，并规范解锁后的全新上下文独立审计流程"
+  default_prompt: "Use $7benchmark-mathmodel to seal and independently audit a modeling benchmark run."
+
+policy:
+  allow_implicit_invocation: false

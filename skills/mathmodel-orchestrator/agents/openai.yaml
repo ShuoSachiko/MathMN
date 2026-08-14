@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模多 Agent 编排"
+  short_description: "隔离上下文、分派角色并验证数学建模 Agent 交接"
+  default_prompt: "Use $mathmodel-orchestrator to coordinate this modeling workflow with isolated agents and verified handoffs."

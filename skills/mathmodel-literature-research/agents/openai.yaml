@@ -1,0 +1,4 @@
+interface:
+  display_name: "数学建模文献与理论检索"
+  short_description: "在正式建模前检索、核验并映射论文、理论、算法和验证依据"
+  default_prompt: "Use $mathmodel-literature-research to build and validate the literature evidence package before modeling."
