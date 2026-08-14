@@ -18,6 +18,7 @@ jobs:
         run: python -m pip install numpy
 
       - name: Run skill tests
+        shell: bash
         run: |
           python skills/1start-mathmodel/scripts/test_project_guard.py
           python skills/1start-mathmodel/scripts/test_task_versions.py
@@ -36,13 +37,17 @@ jobs:
           python skills/1start-mathmodel/tests/test_time_tracker.py
 
       - name: Validate writing templates
+        shell: bash
         run: |
           python skills/5writing/scripts/validate_templates.py
           python skills/5writing/scripts/sanitize_reference_templates.py skills/5writing/templates --check
 
       # MATLAB/Octave is not installed on the runner. The runner reports
       # "available: false" and exits 1, which we treat as a non-failure.
+      # `|| exit 0` is bash syntax; declare bash explicitly because the
+      # windows-latest default shell (PowerShell) cannot parse it.
       - name: Check MATLAB/Octave availability
+        shell: bash
         run: python skills/3coding-visual/scripts/matlab_runner.py --check || exit 0
 
   backend-lint:
